@@ -370,8 +370,18 @@ class User {
         this.username = username;
         this.password = password;
     }
-    public int sizePlaylist() {
-        return playlists.size();
+    public int totalSongDuration() {
+        int totalDuration = 0;
+        if(playlists.size()>0) {
+            for(int i = 0; i<playlists.size(); i++) {
+                if(playlists.get(i).songList.size()>0) {
+                    for(int k = 0; k<playlists.get(i).songList.size(); k++) {
+                        totalDuration += playlists.get(i).songList.get(k).duration;
+                    }
+                }
+            }
+        }
+        return totalDuration;
     }
 }
 
@@ -382,8 +392,14 @@ class Playlist {
     public Playlist(String title) {
         this.title = title;
     }
-    public int sizeSongList() {
-        return songList.size();
+    public int totalSongListDuration() {
+        int totalDuration = 0;
+        if(songList.size()>0) {
+            for(int i = 0; i<songList.size(); i++) {
+                totalDuration += songList.get(i).duration;
+            }
+        }
+        return totalDuration;
     }
 }
 
@@ -395,8 +411,8 @@ class Song {
     private String[] line2;
     private int linenum = 0;
     private int adnum = 0;
-    
-    
+
+
 
     public Song(String title, String artist, String mood, String language, int duration, ArrayList<String> date) {
         this.title = title;
@@ -409,10 +425,9 @@ class Song {
     public String durationConvert() {
         return duration/60 + ":" + duration%60;
     }
-    
     public void ad(){
         try (BufferedReader br = new BufferedReader(new FileReader("ads.csv"))) {
-            
+
             if(adnum == 0){
                 line = br.readLine().split(",");
             }
